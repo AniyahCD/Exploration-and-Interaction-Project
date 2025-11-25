@@ -12,10 +12,13 @@ public class NPCDialogueManager : MonoBehaviour
 
     public GameObject marker;
 
+    public GameObject money;
+
     Animator animator;
 
     public ObjectiveManager objectiveManager;
-    public int objectiveIndexToChange = 1;
+    public int objectiveIndexToChangeUI;
+    public int objectiveIndexToChangeMoney;
     public string newObjectiveText;
 
     private int currentIndex = -1;
@@ -40,13 +43,17 @@ public class NPCDialogueManager : MonoBehaviour
             audioSource.Stop();
             audioSource.loop = false;
             loopStopped = true;
+        }
+
+        if (animator != null)
+        {
             animator.Play("Standing Idle");
         }
 
-        currentIndex++;
+        ++currentIndex;
 
         // Out of lines
-        if (currentIndex == lines.Length - 1)
+        if (currentIndex >= lines.Length)
         {
             if (marker != null) marker.SetActive(false);
             return;
@@ -57,9 +64,14 @@ public class NPCDialogueManager : MonoBehaviour
         audioSource.Play();
 
         // If this is the objective-changing line:
-        if (currentIndex == objectiveIndexToChange)
+        if (currentIndex == objectiveIndexToChangeUI)
         {
             objectiveManager.SetObjective(newObjectiveText);
+        }
+
+        if (currentIndex == objectiveIndexToChangeMoney)
+        {
+            money.SetActive(true);
         }
     }
 }
