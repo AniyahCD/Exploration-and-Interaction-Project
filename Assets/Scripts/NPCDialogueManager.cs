@@ -12,6 +12,8 @@ public class NPCDialogueManager : MonoBehaviour
 
     public GameObject marker;
 
+    Animator animator;
+
     public ObjectiveManager objectiveManager;
     public int objectiveIndexToChange = 1;
     public string newObjectiveText;
@@ -21,6 +23,8 @@ public class NPCDialogueManager : MonoBehaviour
 
     void Start()
     {
+        animator = GetComponent<Animator>();
+
         if (playLoopAtStart && loopingCall != null)
         {
             audioSource.clip = loopingCall;
@@ -36,12 +40,13 @@ public class NPCDialogueManager : MonoBehaviour
             audioSource.Stop();
             audioSource.loop = false;
             loopStopped = true;
+            animator.Play("Standing Idle");
         }
 
         currentIndex++;
 
         // Out of lines
-        if (currentIndex >= lines.Length)
+        if (currentIndex == lines.Length - 1)
         {
             if (marker != null) marker.SetActive(false);
             return;
